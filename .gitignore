@@ -1,0 +1,8 @@
+devices.json
+datasets/
+qc/
+telemetry/
+__pycache__/
+*.py[cod]
+.venv/
+

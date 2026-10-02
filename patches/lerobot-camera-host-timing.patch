@@ -1,0 +1,40 @@
+diff --git a/src/lerobot/cameras/opencv/camera_opencv.py b/src/lerobot/cameras/opencv/camera_opencv.py
+index 1438fe1..9323d45 100644
+--- a/src/lerobot/cameras/opencv/camera_opencv.py
++++ b/src/lerobot/cameras/opencv/camera_opencv.py
+@@ -115,6 +115,9 @@ class OpenCVCamera(Camera):
+         self.frame_lock: Lock = Lock()
+         self.latest_frame: NDArray[Any] | None = None
+         self.latest_timestamp: float | None = None
++        self.frame_seq: int = 0
++        self.frame_update_monotonic_ns: int | None = None
++        self.last_read_frame_metadata: tuple[int, int | None] | None = None
+         self.new_frame_event: Event = Event()
+ 
+         self.rotation: int | None = get_cv2_rotation(config.rotation)
+@@ -480,12 +483,16 @@ class OpenCVCamera(Camera):
+         while not stop_event.is_set():
+             try:
+                 raw_frame = self._read_from_hardware()
++                # Host receive time immediately after successful cap.read(), not exposure time.
++                frame_update_monotonic_ns = time.monotonic_ns()
+                 processed_frame = self._postprocess_image(raw_frame)
+                 capture_time = time.perf_counter()
+ 
+                 with self.frame_lock:
+                     self.latest_frame = processed_frame
+                     self.latest_timestamp = capture_time
++                    self.frame_seq += 1
++                    self.frame_update_monotonic_ns = frame_update_monotonic_ns
+                 self.new_frame_event.set()
+                 failure_count = 0
+ 
+@@ -612,6 +619,8 @@ class OpenCVCamera(Camera):
+         with self.frame_lock:
+             frame = self.latest_frame
+             timestamp = self.latest_timestamp
++            # Pair telemetry with the exact returned array in the same critical section.
++            self.last_read_frame_metadata = (self.frame_seq, self.frame_update_monotonic_ns)
+ 
+         if frame is None or timestamp is None:
+             raise RuntimeError(f"{self} has not captured any frames yet.")

@@ -1,0 +1,26 @@
+{
+  "leader": {
+    "port": "/dev/serial/by-id/REPLACE_WITH_LEADER_DEVICE",
+    "id": "so101_leader"
+  },
+  "follower": {
+    "port": "/dev/serial/by-id/REPLACE_WITH_FOLLOWER_DEVICE",
+    "id": "so101_follower"
+  },
+  "cameras": {
+    "front": {
+      "path": "/dev/v4l/by-id/REPLACE_WITH_FRONT_CAMERA",
+      "width": 640,
+      "height": 480,
+      "fps": 30,
+      "fourcc": "MJPG"
+    },
+    "wrist": {
+      "path": "/dev/v4l/by-id/REPLACE_WITH_WRIST_CAMERA",
+      "width": 640,
+      "height": 480,
+      "fps": 30,
+      "fourcc": "MJPG"
+    }
+  }
+}
