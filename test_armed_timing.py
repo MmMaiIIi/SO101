@@ -34,12 +34,17 @@ class InlineWriter:
         self.results.put(('saved',1) if kind=='save' else ('discarded',None))
 
 
-def feed(state, index, delta=0., repeated=False, image=None, gripper_delta=0.):
+def feed(state, index, delta=0., repeated=False, image=None, gripper_delta=0.,
+         state_marker=None, action_marker=None):
     ns=10_000_000_000+index*33_333_333
     action={f'{j}.pos':delta if j=='shoulder_pan' else 0. for j in JOINTS}
     action['gripper.pos']=gripper_delta
+    if action_marker is not None:
+        action['wrist_roll.pos']=action_marker
     image=np.full((48,64,3),index%255,np.uint8) if image is None else image
     obs={**action,'front':image,'wrist':image}
+    if state_marker is not None:
+        obs['shoulder_pan.pos']=state_marker
     seq=index-1 if repeated else index
     update=ns-50_000_000 if repeated else ns-5_000_000
     cameras={name:SimpleNamespace(latest_timestamp=time.perf_counter(),last_read_frame_metadata=(seq,update)) for name in ('front','wrist')}
@@ -111,6 +116,23 @@ class ArmedTimingTests(unittest.TestCase):
         self.assertTrue(all(float(f['action'][0])==0 for f in writer.frames[:-2]))
         self.assertAlmostEqual(state.started,writer.frames[0]['_collector_qc']['tick_monotonic_ns']/1e9)
         self.assertAlmostEqual((writer.frames[-1]['_collector_qc']['tick_monotonic_ns']-writer.frames[0]['_collector_qc']['tick_monotonic_ns'])/1e9,11/30,places=6)
+
+    def test_pre_roll_keeps_state_action_from_same_control_tick(self):
+        state,writer=self.make_state()
+        for i in range(1,61):
+            feed(state,i,state_marker=1000+i,action_marker=i/1000)
+        feed(state,61,1.,state_marker=1061,action_marker=.061)
+        feed(state,62,1.2,state_marker=1062,action_marker=.062)
+
+        self.assertTrue(state.recording)
+        frames=writer.frames
+        expected_ticks=list(range(51,63))
+        observed_state=[int(frame['observation.state'][0])-1000 for frame in frames]
+        observed_action=[round(float(frame['action'][4])*1000) for frame in frames]
+        observed_tick=[(frame['_collector_qc']['tick_monotonic_ns']-10_000_000_000)//33_333_333 for frame in frames]
+        self.assertEqual(observed_state,expected_ticks)
+        self.assertEqual(observed_action,expected_ticks)
+        self.assertEqual(observed_tick,expected_ticks)
 
     def test_cancel_armed_no_episode_and_same_task(self):
         state,writer=self.make_state(); task=state.task
