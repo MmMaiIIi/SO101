@@ -23,7 +23,7 @@ Arm dimensions 0–4 are decoded relative to the state at chunk creation; grippe
 
 ## Freeze identity
 
-The executable baseline is frozen at the annotated Git tag `pi05-stack2-deployment-v1`. The tag target is the v1 freeze commit; the concrete commit SHA is recorded here after that commit is created. Configuration SHA-256 is recorded in the tag metadata/release notes. Stack3 work must branch from this tag and record the base deployment commit SHA, checkpoint SHA, and config SHA. Any runtime change requires an explicit `DEPLOYMENT_CHANGE` and separate ablation; do not modify the v1 branch during Stack3 experiments.
+The frozen code/config commit is `4689af34ea3c9886b2834531d161ee21697fe59c`. The runtime config SHA-256 is `1c1900f3545426a9d0a78187294e401fd17ff7ecab3623086158f11d8b082039`. The release tag `pi05-stack2-deployment-v1` must point to the follow-up metadata commit whose parent is the frozen code/config commit; runtime code and config are unchanged in that follow-up. Create/push that tag only after the tagged commit exists remotely. Stack3 work branches from the tag and records the frozen base commit, checkpoint SHA, and config SHA. Any runtime change requires an explicit `DEPLOYMENT_CHANGE` and separate ablation; do not modify the v1 branch during Stack3 experiments.
 
 ## Reproduction entry points
 
