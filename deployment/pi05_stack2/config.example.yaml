@@ -1,0 +1,19 @@
+checkpoint:
+  repo_id: WoWjx/so101-stack2-pi05-full-relative
+  revision: main
+  local_path: models/so101-pi05-4228
+inference:
+  server: http://127.0.0.1:8765
+policy:
+  language_instruction: Stack the yellow block on top of the blue block.
+  chunk_size: 50
+  execute_horizon: 10
+robot:
+  type: so101
+  devices_json: devices.json
+  calibration: follower-calibration.json
+control:
+  hz: 30
+  policy_timeout_s: 2.0
+safety:
+  profile: artifacts/safety_profile.json

@@ -5,4 +5,12 @@ telemetry/
 __pycache__/
 *.py[cod]
 .venv/
-
+models/
+runs/
+*.safetensors
+artifacts/
+deployment-readonly.yaml
+deployment-closure.tar
+/deployment-async.tar
+deployment-async.tar
+runs/
