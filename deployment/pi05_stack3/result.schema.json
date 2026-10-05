@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SO101 Stack3 inference-only attempt result",
+  "type": "object",
+  "required": [
+    "condition", "attempt", "instruction", "task_outcome", "runtime_termination",
+    "subtask1_outcome", "subtask2_outcome", "failure_stage", "failure_labels",
+    "policy_inference_requests", "policy_motor_commands", "queue_underflow_ticks",
+    "safe_hold_duration_s", "safety_interventions", "duration_s",
+    "subtask_transitions", "first_stack_destroyed_during_second", "final_stack_order",
+    "stable_observation_window_s", "video_path", "log_path", "base_deployment_git_sha",
+    "checkpoint_sha256", "deployment_v1_config_sha256", "deployment_changed"
+  ],
+  "properties": {
+    "condition": {"enum": ["B0", "B1-privileged"]},
+    "attempt": {"type": "integer", "minimum": 1},
+    "instruction": {"type": "string"},
+    "task_outcome": {"enum": ["SUCCESS", "FAILURE", "UNKNOWN"]},
+    "runtime_termination": {"enum": ["COMPLETED", "SAFETY_ABORT", "SYSTEM_ABORT", "OPERATOR_ABORT", "TIMEOUT"]},
+    "subtask1_outcome": {"enum": ["SUCCESS", "FAILURE", "UNKNOWN"]},
+    "subtask2_outcome": {"enum": ["SUCCESS", "FAILURE", "UNKNOWN"]},
+    "failure_stage": {"type": ["string", "null"]},
+    "failure_labels": {
+      "type": "array",
+      "items": {"enum": ["NO_GRASP_1", "BAD_PLACE_1", "STACK1_UNSTABLE", "FAILED_TRANSITION", "NO_GRASP_2", "DESTROYED_EXISTING_STACK", "BAD_PLACE_2", "FINAL_STACK_UNSTABLE", "SAFETY_ABORT", "SYSTEM_ABORT"]}
+    },
+    "policy_inference_requests": {"type": "integer", "minimum": 0},
+    "policy_motor_commands": {"type": "integer", "minimum": 0},
+    "queue_underflow_ticks": {"type": "integer", "minimum": 0},
+    "safe_hold_duration_s": {"type": "number", "minimum": 0},
+    "safety_interventions": {"type": "integer", "minimum": 0},
+    "duration_s": {"type": "number", "minimum": 0},
+    "subtask_transitions": {"type": "integer", "minimum": 0},
+    "first_stack_destroyed_during_second": {"type": "boolean"},
+    "final_stack_order": {"type": "array", "items": {"enum": ["red", "blue", "yellow"]}},
+    "stable_observation_window_s": {"type": "number", "minimum": 0},
+    "video_path": {"type": "string"},
+    "log_path": {"type": "string"},
+    "base_deployment_git_sha": {"const": "4689af34ea3c9886b2834531d161ee21697fe59c"},
+    "checkpoint_sha256": {"const": "f54e8cec0217bc5e2baebc095f06979675209c955093e7d5916fc5587eb098c4"},
+    "deployment_v1_config_sha256": {"const": "1c1900f3545426a9d0a78187294e401fd17ff7ecab3623086158f11d8b082039"},
+    "deployment_changed": {"const": false}
+  }
+}

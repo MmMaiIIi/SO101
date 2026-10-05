@@ -1,0 +1,14 @@
+{
+  "base_deployment_git_sha": "4689af34ea3c9886b2834531d161ee21697fe59c",
+  "freeze_metadata_commit": "62b0b7de77d55a2d7d8132291f5bf3432fd73fbe",
+  "deployment_v1_config_sha256": "1c1900f3545426a9d0a78187294e401fd17ff7ecab3623086158f11d8b082039",
+  "checkpoint": {
+    "repo_id": "WoWjx/so101-stack2-pi05-full-relative",
+    "revision": "main",
+    "training_step": 4228,
+    "sha256": "f54e8cec0217bc5e2baebc095f06979675209c955093e7d5916fc5587eb098c4"
+  },
+  "deployment_change": false,
+  "simulation_used": false,
+  "stack3_physical_attempts": 0
+}
