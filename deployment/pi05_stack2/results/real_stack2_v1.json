@@ -1,0 +1,47 @@
+{
+  "schema_version": "so101-stack2-result-v1",
+  "task": "blue_on_yellow",
+  "instruction": "Stack the blue block on top of the yellow block.",
+  "task_outcome": "SUCCESS",
+  "runtime_termination": "SAFETY_ABORT",
+  "visual_evidence": "Blue remains stably supported by yellow after release and gripper withdrawal in the final video frames.",
+  "policy_motor_commands": 1187,
+  "inference_requests": 58,
+  "duration_s": 44.0343,
+  "control_hz": 30,
+  "action_chunk_size": 50,
+  "actions_per_chunk": 50,
+  "queue_threshold": 0.6,
+  "queue_underflow_ticks": 130,
+  "stale_replays": 0,
+  "inference_latency_ms": {
+    "p50": 640.37,
+    "p95": 1085.15,
+    "p99": 1185.18
+  },
+  "prediction_age_ms": {
+    "p50": 1033.49,
+    "p95": 1532.89,
+    "p99": 1618.39
+  },
+  "safety_abort": {
+    "category": "POSITION_LIMIT",
+    "joint": "shoulder_lift.pos",
+    "target_deg": -105.67981,
+    "calibration_lower_deg": -105.53846,
+    "excess_deg": 0.14135,
+    "sent_to_motor": false,
+    "phase": "retreat_after_visual_task_completion"
+  },
+  "retry_history": [
+    "Earlier attempt stopped on WAN tunnel timeout; tunnel was restored before retry.",
+    "This run completed the blue-on-yellow Stack2 task before the retreat target was rejected."
+  ],
+  "checkpoint": {
+    "repo_id": "WoWjx/so101-stack2-pi05-full-relative",
+    "revision": "main",
+    "step": 4228,
+    "sha256": "f54e8cec0217bc5e2baebc095f06979675209c955093e7d5916fc5587eb098c4"
+  },
+  "artifact_policy": "Full video and per-tick logs are retained outside Git."
+}

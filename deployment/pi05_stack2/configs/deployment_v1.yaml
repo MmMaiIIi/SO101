@@ -1,0 +1,48 @@
+schema_version: so101-pi05-stack2-deployment-v1
+checkpoint:
+  repo_id: WoWjx/so101-stack2-pi05-full-relative
+  revision: main
+  training_step: 4228
+  sha256: f54e8cec0217bc5e2baebc095f06979675209c955093e7d5916fc5587eb098c4
+robot:
+  type: so101
+  state_order: [shoulder_pan, shoulder_lift, elbow_flex, wrist_flex, wrist_roll, gripper]
+  action_order: [shoulder_pan, shoulder_lift, elbow_flex, wrist_flex, wrist_roll, gripper]
+control:
+  hz: 30
+policy:
+  predicted_chunk_size: 50
+  actions_per_chunk: 50
+  arm_action: relative_to_observation_anchor
+  gripper_action: absolute_0_100
+async:
+  refill_threshold: 0.6
+  stale_replay: false
+  queue_empty_behavior: safe_hold_current_target
+transport:
+  image_encoding: png
+  persistent_http_connection: true
+  ssh_forward: true
+  ssh_compression: true
+serial:
+  read_retries: 2
+  max_read_attempts: 3
+  single_owner: control_worker
+safety:
+  absolute_position_and_calibration_bounds: hard_reject
+  nan_inf: hard_stop
+  stale_state: hard_stop
+  stale_camera: hard_stop
+  communication_loss: hard_stop
+  percentile_slew: warning_only
+  targets_are_clipped: false
+recovery:
+  startup_inward_recovery_temporary_p: 32
+  policy_normal_p: 16
+  torque_off_during_recovery: false
+evidence:
+  task: blue_on_yellow
+  task_outcome: SUCCESS
+  runtime_termination: SAFETY_ABORT
+  inference_requests: 58
+  policy_motor_commands: 1187
